@@ -9,7 +9,7 @@
 
 ## Descripción
 
-API REST backend para el sistema de gestión de la World Football League (WFL), construida con NestJS. Proporciona endpoints para gestionar series, equipos, jugadores y autenticación de usuarios.
+API REST backend para el sistema de gestión de la Waifu Football League (WFL), construida con NestJS. Proporciona endpoints para gestionar series, equipos, jugadores y autenticación de usuarios.
 
 ## ✨ Características
 
