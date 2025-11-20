@@ -9,7 +9,7 @@
 
 ## Descripción
 
-API REST backend para el sistema de gestión de la World Football League (WFL), construida con NestJS. Proporciona endpoints para gestionar series, equipos, jugadores y autenticación de usuarios.
+API REST backend para el sistema de gestión de la Waifu Football League (WFL), construida con NestJS. Proporciona endpoints para gestionar series, equipos, jugadores y autenticación de usuarios.
 
 ## ✨ Características
 
@@ -78,7 +78,7 @@ pnpm start:prod
 
 ## Documentación de API
 
-La documentación Swagger está disponible en `/api` cuando el servidor está ejecutándose.
+La documentación Swagger está disponible en `/api/docs` cuando el servidor está ejecutándose. Incluye autenticación JWT, ejemplos de requests y responses, y documentación completa de todos los endpoints.
 
 ## Scripts Disponibles
 
@@ -198,4 +198,4 @@ Este proyecto es privado y no tiene licencia pública.
 
 ## 📞 Soporte
 
-Si tienes preguntas o necesitas ayuda, abre un [issue](https://github.com/tu-usuario/wfl/issues) en GitHub.
+Si tienes preguntas o necesitas ayuda, abre un [issue](https://github.com/lans757/wfl/issues) en GitHub.
