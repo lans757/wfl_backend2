@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
-import { CreateJugadoresDto } from './dto/create-jugadores.dto';
-import { UpdateJugadoresDto } from './dto/update-jugadores.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CreatePlayersDto } from './dto/create-players.dto';
+import { UpdatePlayersDto } from './dto/update-players.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 import * as XLSX from 'xlsx';
 
 @Injectable()
-export class JugadoresService {
+export class PlayersService {
 
   constructor(private prismaService: PrismaService){}
 
-  async create(createJugadoresDto: CreateJugadoresDto, imagen?: Express.Multer.File) {
+  async create(createPlayersDto: CreatePlayersDto, imagen?: Express.Multer.File) {
     try {
       let imagenPath: string | undefined;
 
@@ -18,10 +18,21 @@ export class JugadoresService {
         imagenPath = `/uploads/${imagen.filename}`;
       }
 
-      return await this.prismaService.jugadores.create({
+      return await this.prismaService.players.create({
         data: {
-          ...createJugadoresDto,
-          imagen: imagenPath
+          name: createPlayersDto.nombre,
+          jerseyNumber: createPlayersDto.numeroCamiseta,
+          position: createPlayersDto.posicion,
+          birthDate: createPlayersDto.fechaNacimiento,
+          nationality: createPlayersDto.nacionalidad,
+          description: createPlayersDto.descripcion,
+          teamId: createPlayersDto.equipoId,
+          height: createPlayersDto.estatura,
+          weight: createPlayersDto.peso,
+          secondaryPosition1: createPlayersDto.posicionSecundaria1,
+          secondaryPosition2: createPlayersDto.posicionSecundaria2,
+          rarity: createPlayersDto.rareza,
+          image: imagenPath
         }
       });
     } catch (error) {
@@ -106,7 +117,7 @@ export class JugadoresService {
     return jugadorFound;
   }
 
-  async update(id: number, updateJugadoresDto: UpdateJugadoresDto, imagen?: Express.Multer.File) {
+  async update(id: number, updatePlayersDto: UpdatePlayersDto, imagen?: Express.Multer.File) {
     try {
       let imagenPath: string | undefined;
 
@@ -116,7 +127,7 @@ export class JugadoresService {
       }
 
       // Convertir campos numéricos de strings a números
-      const dataToUpdate: any = { ...updateJugadoresDto };
+      const dataToUpdate: any = { ...updatePlayersDto };
 
       if (dataToUpdate.estatura !== undefined && dataToUpdate.estatura !== null && dataToUpdate.estatura !== '') {
         dataToUpdate.estatura = parseFloat(dataToUpdate.estatura);

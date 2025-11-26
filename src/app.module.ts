@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { JugadoresModule } from './jugadores/jugadores.module';
-import { EquiposModule } from './equipos/equipos.module';
-import { SeriesModule } from './series/series.module';
-import { AuthModule } from './auth/auth.module';
+import { PlayersModule } from './modules/players/players.module';
+import { TeamsModule } from './modules/teams/teams.module';
+import { SeriesModule } from './modules/series/series.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 import { PrismaService } from './prisma/prisma.service';
 import { CommonModule } from './common/common.module';
 
@@ -15,10 +16,11 @@ import { CommonModule } from './common/common.module';
       serveRoot: '/uploads',
     }),
     CommonModule,
-    JugadoresModule,
-    EquiposModule,
+    PlayersModule,
+    TeamsModule,
     SeriesModule,
-    AuthModule
+    AuthModule,
+    UsersModule
   ],
   controllers: [],
   providers: [PrismaService],

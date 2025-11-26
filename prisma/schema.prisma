@@ -7,32 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model equipos {
+model teams {
   id          Int         @id @default(autoincrement())
-  nombre      String
-  descripcion String?
-  estadio     String?
-  ciudad      String?
-  imagen      String?
-  serieId     Int?
-  serie       series?     @relation(fields: [serieId], references: [id])
-  createAt    DateTime    @default(now())
-  updateAt    DateTime    @updatedAt
-  jugadores   jugadores[]
+  name        String
+  description String?
+  stadium     String?
+  city        String?
+  image       String?
+  seriesId    Int?
+  series      series?     @relation(fields: [seriesId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  players     players[]
 }
 
 model series {
   id              Int       @id @default(autoincrement())
-  nombre          String
-  descripcion     String?
-  fechaLanzamiento DateTime?
-  estado          String?
-  temporada       String?
-  pais            String?
-  imagen          String?
-  createAt        DateTime  @default(now())
-  updateAt        DateTime  @updatedAt
-  equipos         equipos[]
+  name            String
+  description     String?
+  launchDate      DateTime?
+  status          String?
+  season          String?
+  country         String?
+  image           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  teams           teams[]
 }
 
 model User {
@@ -41,27 +41,27 @@ model User {
   password  String
   name      String?
   role      String   @default("user")
-  imagen    String?
+  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model jugadores {
+model players {
   id                  Int       @id @default(autoincrement())
-  nombre              String
-  numeroCamiseta      String
-  posicion            String
-  fechaNacimiento     DateTime?
-  nacionalidad        String?
-  descripcion         String?
-  estatura            Float?
-  peso                Float?
-  posicionSecundaria1 String?
-  posicionSecundaria2 String?
-  rareza              String?
-  imagen              String?
-  createAt            DateTime  @default(now())
-  updateAt            DateTime  @updatedAt
-  equipoId            Int?
-  equipo              equipos?  @relation(fields: [equipoId], references: [id])
+  name                String
+  jerseyNumber        String
+  position            String
+  birthDate           DateTime?
+  nationality         String?
+  description         String?
+  height              Float?
+  weight              Float?
+  secondaryPosition1  String?
+  secondaryPosition2  String?
+  rarity              String?
+  image               String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  teamId              Int?
+  team                teams?    @relation(fields: [teamId], references: [id])
 }

@@ -1,35 +1,35 @@
-import { IsNotEmpty, IsString, IsInt, IsIn, IsOptional, IsDate, Min } from 'class-validator';
+import { IsNotEmpty, IsString, IsIn, IsOptional, IsDate, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
-// ⚠️ NOTA: Este DTO no incluye 'id', 'createAt', 'updateAt' porque esos campos
-// los gestiona la base de datos o el servidor al CREAR el registro.
+// ⚠️ NOTA: Este DTO es para actualizaciones, por lo que todos los campos son opcionales.
+// Los campos que se envíen serán validados según las reglas del CreateJugadoresDto.
 
-export class CreateJugadoresDto {
+export class UpdatePlayersDto {
 
   // --- Campos Esenciales de Jugador ---
 
   @IsString()
-  @IsNotEmpty({ message: 'El nombre del jugador es obligatorio.' })
-  readonly nombre: string;
+  @IsOptional()
+  readonly nombre?: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'El número de camiseta es obligatorio.' })
-  readonly numeroCamiseta: string;
+  @IsOptional()
+  readonly numeroCamiseta?: string;
 
   // Limita las opciones de posición para asegurar la consistencia de los datos
   @IsString()
-  @IsNotEmpty({ message: 'La posición es obligatoria.' })
+  @IsOptional()
   @IsIn(['Portero', 'Defensa', 'Mediocampista', 'Delantero', 'Reservas'], {
     message: 'La posición debe ser: Portero, Defensa, Mediocampista, Delantero o Reservas.',
   })
-  readonly posicion: string;
+  readonly posicion?: string;
 
   // --- Campos Adicionales Sugeridos ---
 
   // Se espera que la fecha llegue como una cadena en formato ISO (Ej: "2000-01-20")
   @IsDate({ message: 'La fecha de nacimiento debe tener un formato de fecha válido.' })
   @Type(() => Date)
-  @IsOptional() // Hacemos la fecha de nacimiento opcional por si no es indispensable
+  @IsOptional()
   readonly fechaNacimiento?: Date;
 
   @IsString()
@@ -42,8 +42,9 @@ export class CreateJugadoresDto {
   readonly descripcion?: string;
 
   @IsInt({ message: 'El ID del equipo debe ser un número entero.' })
+  @IsOptional()
   @Type(() => Number)
-  readonly equipoId: number;
+  readonly equipoId?: number;
 
   // --- Campos para el sistema de cartas coleccionables ---
 
