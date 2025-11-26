@@ -16,6 +16,11 @@ RUN pnpm install --prod --frozen-lockfile
 
 # Build stage
 FROM base AS builder
+
+# Build argument para DATABASE_URL
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -23,7 +28,7 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 
 # Generate Prisma Client
-RUN pnpm prisma generate
+RUN npx prisma generate
 
 # Build de la aplicación
 RUN pnpm run build
