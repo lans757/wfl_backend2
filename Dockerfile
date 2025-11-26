@@ -1,24 +1,28 @@
 # Dockerfile para el Backend (NestJS)
 FROM node:18-alpine AS base
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema y pnpm
 RUN apk add --no-cache libc6-compat curl
+RUN npm install -g pnpm
 
 # Crear directorio de trabajo
 WORKDIR /app
 
 # Copiar archivos de dependencias
 FROM base AS deps
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production && npm cache clean --force
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile
 
 # Build stage
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Install all dependencies (including dev) for build
+RUN pnpm install --frozen-lockfile
+
 # Build de la aplicación
-RUN npm run build
+RUN pnpm run build
 
 # Production stage
 FROM base AS runner
@@ -45,4 +49,4 @@ EXPOSE 4000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:4000/api/auth/users || exit 1
 
-CMD ["npm", "run", "start:prod"]
+CMD ["pnpm", "run", "start:prod"]
