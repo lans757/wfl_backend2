@@ -49,72 +49,72 @@ export class PlayersService {
   }
 
   async findAll() {
-    const jugadores = await this.prismaService.jugadores.findMany({
+    const players = await this.prismaService.players.findMany({
       include: {
-        equipo: {
+        team: {
           include: {
-            serie: true
+            series: true
           }
         }
       }
     });
-    return this.addImageUrls(jugadores);
+    return this.addImageUrls(players);
   }
 
   async count() {
-    return this.prismaService.jugadores.count();
+    return this.prismaService.players.count();
   }
 
   async findAllWithDetails() {
-    const jugadores = await this.prismaService.jugadores.findMany({
-      orderBy: { createAt: 'desc' },
+    const players = await this.prismaService.players.findMany({
+      orderBy: { createdAt: 'desc' },
       include: {
-        equipo: {
+        team: {
           include: {
-            serie: true
+            series: true
           }
         }
       }
     });
-    return this.addImageUrls(jugadores);
+    return this.addImageUrls(players);
   }
 
-  private addImageUrls(jugadores: any[]) {
-    return jugadores.map(jugador => ({
-      ...jugador,
-      imagenUrl: jugador.imagen ? `${process.env.BASE_URL || 'http://localhost:4000'}${jugador.imagen}` : null
+  private addImageUrls(players: any[]) {
+    return players.map(player => ({
+      ...player,
+      imageUrl: player.image ? `${process.env.BASE_URL || 'http://localhost:4000'}${player.image}` : null
     }));
   }
 
   async findOne(id: number) {
-    const jugadorFound = await this.prismaService.jugadores.findUnique(
+    const playerFound = await this.prismaService.players.findUnique(
       {
         where: { id },
         select: {
           id: true,
-          nombre: true,
-          numeroCamiseta: true,
-          posicion: true,
-          fechaNacimiento: true,
-          nacionalidad: true,
-          descripcion: true,
-          estatura: true,
-          peso: true,
-          posicionSecundaria1: true,
-          posicionSecundaria2: true,
-          rareza: true,
-          createAt: true,
-          updateAt: true,
-          equipoId: true,
-          // Excluimos equipo e imagen de la respuesta
+          name: true,
+          jerseyNumber: true,
+          position: true,
+          birthDate: true,
+          nationality: true,
+          description: true,
+          height: true,
+          weight: true,
+          secondaryPosition1: true,
+          secondaryPosition2: true,
+          rarity: true,
+          createdAt: true,
+          updatedAt: true,
+          teamId: true,
+          // Excluimos team e image de la respuesta
         }
       }
     );
 
-    if (!jugadorFound) {
-      throw new NotFoundException(`Jugador con el id ${id}, no ha sido encontrado`);
+    if (!playerFound) {
+      throw new NotFoundException(`Player with id ${id} not found`);
     }
-    return jugadorFound;
+    return playerFound;
   }
 
   async update(id: number, updatePlayersDto: UpdatePlayersDto, imagen?: Express.Multer.File) {
@@ -148,18 +148,18 @@ export class PlayersService {
       }
 
       if (imagenPath) {
-        dataToUpdate.imagen = imagenPath;
+        dataToUpdate.image = imagenPath;
       }
 
-      const jugadoractualizado = await this.prismaService.jugadores.update({
+      const playerUpdated = await this.prismaService.players.update({
         where: { id },
         data: dataToUpdate
       });
 
-      if (!jugadoractualizado) {
-        throw new NotFoundException(`Jugador con el id ${id}, no ha sido Actualizado`);
+      if (!playerUpdated) {
+        throw new NotFoundException(`Player with id ${id} not updated`);
       }
-      return jugadoractualizado;
+      return playerUpdated;
     } catch (error) {
       console.error('Error actualizando jugador:', error);
       throw new HttpException(
@@ -189,17 +189,17 @@ export class PlayersService {
 
       const imagenPath = `/uploads/${imagen.filename}`;
 
-      const jugador = await this.prismaService.jugadores.update({
+      const player = await this.prismaService.players.update({
         where: { id },
-        data: { imagen: imagenPath },
+        data: { image: imagenPath },
         select: {
           id: true,
-          nombre: true,
-          imagen: true,
+          name: true,
+          image: true,
         },
       });
 
-      return jugador;
+      return player;
     } catch (error) {
       // Si es un error de Prisma (jugador no encontrado)
       if (error.code === 'P2025') {
@@ -224,13 +224,13 @@ export class PlayersService {
   }
 
   async remove(id: number) {
-    const jugadorRemove = await this.prismaService.jugadores.delete({
+    const playerRemove = await this.prismaService.players.delete({
       where:{id}
     })
-    if (!jugadorRemove){
-      throw new NotFoundException(`Jugador con el id ${id}, no ha sido Eliminado`);
+    if (!playerRemove){
+      throw new NotFoundException(`Player with id ${id} not deleted`);
     }
-    return jugadorRemove;
+    return playerRemove;
   }
 
   async importFromExcel(buffer: Buffer) {
@@ -250,22 +250,22 @@ export class PlayersService {
         }
       }
 
-      const jugadores = data.map((row: any) => ({
-        nombre: row['Name'],
-        numeroCamiseta: '1', // Valor por defecto como string
-        posicion: row['Main position'],
-        fechaNacimiento: new Date(row['Birthdate']),
-        nacionalidad: row['Nationality'],
-        descripcion: '', // Valor por defecto
-        estatura: parseFloat(row['Height']),
-        peso: parseFloat(row['Weight']),
-        posicionSecundaria1: row['Secondary position 1'] || null,
-        posicionSecundaria2: row['Secondary position 2'] || null,
-        rareza: row['Rarity'],
-        equipoId: null, // Valor por defecto
+      const players = data.map((row: any) => ({
+        name: row['Name'],
+        jerseyNumber: '1', // Valor por defecto como string
+        position: row['Main position'],
+        birthDate: new Date(row['Birthdate']),
+        nationality: row['Nationality'],
+        description: '', // Valor por defecto
+        height: parseFloat(row['Height']),
+        weight: parseFloat(row['Weight']),
+        secondaryPosition1: row['Secondary position 1'] || null,
+        secondaryPosition2: row['Secondary position 2'] || null,
+        rarity: row['Rarity'],
+        teamId: null, // Valor por defecto
       }));
 
-      return this.prismaService.jugadores.createMany({ data: jugadores });
+      return this.prismaService.players.createMany({ data: players });
     } catch (error) {
       throw new Error('No se pudo cargar el archivo porque no cumple con los parámetros de carga');
     }

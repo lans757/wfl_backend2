@@ -8,52 +8,52 @@ import {
  * DTO (Data Transfer Object) para la actualización parcial de equipos.
  * Todos los campos son opcionales para permitir actualizaciones parciales.
  */
-export class UpdateEquipoDto {
+export class UpdateTeamDto {
   /**
-   * Nombre oficial del equipo. Campo opcional.
+   * Team name. Optional.
    * @example "Club Atlético de Madrid"
    */
   @IsString()
   @IsOptional()
-  nombre?: string;
+  name?: string;
 
   /**
-   * Nombre del estadio principal del equipo. Campo opcional.
+   * Stadium name. Optional.
    * @example "Cívitas Metropolitano"
    */
   @IsString()
   @IsOptional()
-  estadio?: string;
+  stadium?: string;
 
   /**
-   * Ciudad de origen del equipo. Campo opcional.
+   * City. Optional.
    * @example "Madrid"
    */
   @IsString()
   @IsOptional()
-  ciudad?: string;
+  city?: string;
 
   /**
-   * Descripción del equipo. Campo opcional.
-   * @example "Equipo histórico con múltiples títulos"
+   * Description. Optional.
+   * @example "Historic team with multiple titles"
    */
   @IsString()
   @IsOptional()
-  descripcion?: string;
+  description?: string;
 
   /**
-   * ID de la serie a la que pertenece el equipo. Campo opcional para actualizaciones.
+   * Series ID. Optional.
    * @example 1
    */
   @IsNumber()
   @IsOptional()
-  serieId?: number;
+  seriesId?: number;
 
   /**
-   * URL o ruta de la imagen del equipo. Campo opcional para actualizaciones.
-   * @example "/uploads/equipo-logo.jpg"
+   * Image URL. Optional.
+   * @example "/uploads/team-logo.jpg"
    */
   @IsString()
   @IsOptional()
-  imagen?: string;
+  image?: string;
 }

@@ -1,11 +1,11 @@
-import { Equipo } from '../../equipos/entities/equipo.entity';
+import { Team } from '../../teams/entities/team.entity';
 
-export class Serie {
+export class Series {
   id: number;
-  nombre: string;
-  temporada?: string;
-  pais?: string;
-  createAt: Date;
-  updateAt: Date;
-  equipos: Equipo[];
+  name: string;
+  season?: string;
+  country?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  teams: Team[];
 }

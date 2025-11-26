@@ -11,53 +11,53 @@ import {
  * DTO (Data Transfer Object) para la creación de nuevos equipos.
  * Define la estructura y reglas de validación para los datos de entrada.
  */
-export class CreateEquipoDto {
+export class CreateTeamDto {
   /**
-   * Nombre oficial del equipo. Es obligatorio.
+   * Name of the team. Required.
    * @example "Club Atlético de Madrid"
    */
   @IsString()
-  @IsNotEmpty({ message: 'El nombre del equipo no puede estar vacío' })
-  nombre: string;
+  @IsNotEmpty({ message: 'Team name cannot be empty' })
+  name: string;
 
   /**
-   * Nombre del estadio principal del equipo. Campo opcional.
+   * Stadium name. Optional.
    * @example "Cívitas Metropolitano"
    */
   @IsString()
   @IsOptional()
-  estadio?: string;
+  stadium?: string;
 
   /**
-   * Ciudad de origen del equipo. Campo opcional.
+   * City of the team. Optional.
    * @example "Madrid"
    */
   @IsString()
   @IsOptional()
-  ciudad?: string;
+  city?: string;
 
   /**
-   * Descripción del equipo. Campo opcional.
-   * @example "Equipo histórico con múltiples títulos"
+   * Description of the team. Optional.
+   * @example "Historic team with multiple titles"
    */
   @IsString()
   @IsOptional()
-  descripcion?: string;
+  description?: string;
 
   /**
-   * ID de la serie a la que pertenece el equipo. Campo opcional.
+   * Series ID the team belongs to. Optional.
    * @example 1
    */
   @IsNumber()
   @IsOptional()
-  serieId?: number;
+  seriesId?: number;
 
   /**
-   * URL o ruta de la imagen del equipo. Campo opcional.
-   * @example "/uploads/equipo-logo.jpg"
+   * Image URL or path. Optional.
+   * @example "/uploads/team-logo.jpg"
    */
   @IsString()
   @IsOptional()
-  imagen?: string;
+  image?: string;
 
 }

@@ -1,22 +1,22 @@
-import { Equipo } from '../../equipos/entities/equipo.entity';
+import { Team } from '../../teams/entities/team.entity';
 
-export class Jugador {
+export class Player {
   id: number;
-  nombre: string;
-  numeroCamiseta: string;
-  posicion: string;
-  fechaNacimiento?: Date;
-  nacionalidad?: string;
-  descripcion?: string;
-  estatura?: number;
-  peso?: number;
-  posicionSecundaria1?: string;
-  posicionSecundaria2?: string;
-  rareza?: string;
-  imagen?: string;
-  url_image?: string;
-  createAt: Date;
-  updateAt: Date;
-  equipoId?: number;
-  equipo?: Equipo;
+  name: string;
+  jerseyNumber: string;
+  position: string;
+  birthDate?: Date;
+  nationality?: string;
+  description?: string;
+  height?: number;
+  weight?: number;
+  secondaryPosition1?: string;
+  secondaryPosition2?: string;
+  rarity?: string;
+  image?: string;
+  urlImage?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  teamId?: number;
+  team?: Team;
 }

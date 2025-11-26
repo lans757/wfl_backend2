@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateSerieDto } from './create-serie.dto';
+import { CreateSerieDto } from './create-series.dto';
 
 /**
  * DTO (Data Transfer Object) para la actualización parcial de Series.

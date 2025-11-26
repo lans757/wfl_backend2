@@ -1,13 +1,13 @@
-import { Serie } from '../../series/entities/serie.entity';
-import { Jugador } from '../../jugadores/entities/jugadore.entity';
+import { Series } from '../../series/entities/series.entity';
+import { Player } from '../../players/entities/player.entity';
 
-export class Equipo {
+export class Team {
   id: number;
-  nombre: string;
-  estadio?: string;
-  ciudad?: string;
-  createAt: Date;
-  updateAt: Date;
-  jugadores: Jugador[];
-  series: Serie[];
+  name: string;
+  stadium?: string;
+  city?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  players: Player[];
+  series: Series[];
 }

@@ -1,21 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateEquipoDto } from './dto/create-equipo.dto';
-import { UpdateEquipoDto } from './dto/update-equipo.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateTeamDto } from './dto/create-team.dto';
+import { UpdateTeamDto } from './dto/update-team.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
-export class EquiposService {
+export class TeamsService {
 
   constructor(private prismaService: PrismaService){}
 
-  private addImageUrls(equipos: any[]) {
-    return equipos.map(equipo => ({
-      ...equipo,
-      imagenUrl: equipo.imagen ? `${process.env.BASE_URL || 'http://localhost:4000'}${equipo.imagen}` : null
+  private addImageUrls(teams: any[]) {
+    return teams.map(team => ({
+      ...team,
+      imageUrl: team.image ? `${process.env.BASE_URL || 'http://localhost:4000'}${team.image}` : null
     }));
   }
 
-  async create(createEquipoDto: CreateEquipoDto, imagen?: Express.Multer.File) {
+  async create(createTeamDto: CreateTeamDto, imagen?: Express.Multer.File) {
     let imagenPath: string | undefined;
 
     if (imagen) {
@@ -23,55 +23,55 @@ export class EquiposService {
       imagenPath = `/uploads/${imagen.filename}`;
     }
 
-    const { serieId, ...equipoData } = createEquipoDto;
-    const equipo = await this.prismaService.equipos.create({
+    const { seriesId, ...teamData } = createTeamDto;
+    const team = await this.prismaService.teams.create({
       data: {
-        ...equipoData,
-        imagen: imagenPath,
-        ...(serieId && { serieId })
+        ...teamData,
+        image: imagenPath,
+        ...(seriesId && { seriesId })
       },
-      include: { serie: true, jugadores: true }
+      include: { series: true, players: true }
     });
 
-    return this.addImageUrls([equipo])[0];
+    return this.addImageUrls([team])[0];
   }
 
   async findAll() {
-    const equipos = await this.prismaService.equipos.findMany({
+    const teams = await this.prismaService.teams.findMany({
       include: {
-        jugadores: true,
-        serie: true
+        players: true,
+        series: true
       }
     });
-    return this.addImageUrls(equipos);
+    return this.addImageUrls(teams);
   }
 
   async count() {
-    return this.prismaService.equipos.count();
+    return this.prismaService.teams.count();
   }
 
   findAllWithSeries() {
-    return this.prismaService.equipos.findMany({
+    return this.prismaService.teams.findMany({
       include: {
-        serie: true,
-        jugadores: true
+        series: true,
+        players: true
       }
     });
   }
 
   async findOne(id: number) {
-    const equipoFound = await this.prismaService.equipos.findUnique({
+    const teamFound = await this.prismaService.teams.findUnique({
       where: { id },
-      include: { jugadores: true, serie: true }
+      include: { players: true, series: true }
     });
 
-    if (!equipoFound) {
-      throw new NotFoundException(`Equipo con el id ${id}, no ha sido encontrado`);
+    if (!teamFound) {
+      throw new NotFoundException(`Team with id ${id} not found`);
     }
-    return equipoFound;
+    return teamFound;
   }
 
-  async update(id: number, updateEquipoDto: UpdateEquipoDto, imagen?: Express.Multer.File) {
+  async update(id: number, updateTeamDto: UpdateTeamDto, imagen?: Express.Multer.File) {
     let imagenPath: string | undefined;
 
     if (imagen) {
@@ -79,39 +79,39 @@ export class EquiposService {
       imagenPath = `/uploads/${imagen.filename}`;
     }
 
-    const dataToUpdate: any = { ...updateEquipoDto };
+    const dataToUpdate: any = { ...updateTeamDto };
     if (imagenPath) {
-      dataToUpdate.imagen = imagenPath;
+      dataToUpdate.image = imagenPath;
     }
 
-    const equipoActualizado = await this.prismaService.equipos.update({
+    const teamUpdated = await this.prismaService.teams.update({
       where: { id },
       data: dataToUpdate,
-      include: { jugadores: true, serie: true }
+      include: { players: true, series: true }
     });
 
-    if (!equipoActualizado) {
-      throw new NotFoundException(`Equipo con el id ${id}, no ha sido Actualizado`);
+    if (!teamUpdated) {
+      throw new NotFoundException(`Team with id ${id} not updated`);
     }
 
-    return this.addImageUrls([equipoActualizado])[0];
+    return this.addImageUrls([teamUpdated])[0];
   }
 
   async remove(id: number) {
-    // Set equipoId to null for players in this equipo
-    await this.prismaService.jugadores.updateMany({
-      where: { equipoId: id },
-      data: { equipoId: null }
+    // Set teamId to null for players in this team
+    await this.prismaService.players.updateMany({
+      where: { teamId: id },
+      data: { teamId: null }
     });
 
-    const equipoRemove = await this.prismaService.equipos.delete({
+    const teamRemove = await this.prismaService.teams.delete({
       where: { id }
     });
 
-    if (!equipoRemove) {
-      throw new NotFoundException(`Equipo con el id ${id}, no ha sido Eliminado`);
+    if (!teamRemove) {
+      throw new NotFoundException(`Team with id ${id} not deleted`);
     }
 
-    return equipoRemove;
+    return teamRemove;
   }
 }

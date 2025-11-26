@@ -1,48 +1,48 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { EquiposService } from './equipos.service';
-import { CreateEquipoDto } from './dto/create-equipo.dto';
-import { UpdateEquipoDto } from './dto/update-equipo.dto';
-import { FileUploadService } from '../common/file-upload.service';
+import { TeamsService } from './teams.service';
+import { CreateTeamDto } from './dto/create-team.dto';
+import { UpdateTeamDto } from './dto/update-team.dto';
+import { FileUploadService } from '../../common/file-upload.service';
 
-@Controller('equipos')
-export class EquiposController {
-  constructor(private readonly equiposService: EquiposService) {}
+@Controller('teams')
+export class TeamsController {
+  constructor(private readonly teamsService: TeamsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('imagen', FileUploadService.multerOptions))
-  create(@Body() createEquipoDto: CreateEquipoDto, @UploadedFile() imagen?: Express.Multer.File) {
-    return this.equiposService.create(createEquipoDto, imagen);
+  @UseInterceptors(FileInterceptor('image', FileUploadService.multerOptions))
+  create(@Body() createTeamDto: CreateTeamDto, @UploadedFile() image?: Express.Multer.File) {
+    return this.teamsService.create(createTeamDto, image);
   }
 
   @Get()
   findAll() {
-    return this.equiposService.findAll();
+    return this.teamsService.findAll();
   }
 
   @Get('count')
   count() {
-    return this.equiposService.count();
+    return this.teamsService.count();
   }
 
   @Get('with-series')
   findAllWithSeries() {
-    return this.equiposService.findAllWithSeries();
+    return this.teamsService.findAllWithSeries();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.equiposService.findOne(+id);
+    return this.teamsService.findOne(+id);
   }
 
   @Patch(':id')
-  @UseInterceptors(FileInterceptor('imagen', FileUploadService.multerOptions))
-  update(@Param('id') id: string, @Body() updateEquipoDto: UpdateEquipoDto, @UploadedFile() imagen?: Express.Multer.File) {
-    return this.equiposService.update(+id, updateEquipoDto, imagen);
+  @UseInterceptors(FileInterceptor('image', FileUploadService.multerOptions))
+  update(@Param('id') id: string, @Body() updateTeamDto: UpdateTeamDto, @UploadedFile() image?: Express.Multer.File) {
+    return this.teamsService.update(+id, updateTeamDto, image);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.equiposService.remove(+id);
+    return this.teamsService.remove(+id);
   }
 }

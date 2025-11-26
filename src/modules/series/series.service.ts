@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { CreateSerieDto } from './dto/create-serie.dto';
-import { UpdateSerieDto } from './dto/update-serie.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateSerieDto } from './dto/create-series.dto';
+import { UpdateSerieDto } from './dto/update-series.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class SeriesService {
@@ -11,7 +11,7 @@ export class SeriesService {
   private addImageUrls(series: any[]) {
     return series.map(serie => ({
       ...serie,
-      imagenUrl: serie.imagen ? `${process.env.BASE_URL || 'http://localhost:4000'}${serie.imagen}` : null
+      imageUrl: serie.image ? `${process.env.BASE_URL || 'http://localhost:4000'}${serie.image}` : null
     }));
   }
 
@@ -19,8 +19,8 @@ export class SeriesService {
     // Verificar si ya existe una serie con el mismo nombre y temporada
     const existingSerie = await this.prismaService.series.findFirst({
       where: {
-        nombre: createSerieDto.nombre,
-        temporada: createSerieDto.temporada
+        name: createSerieDto.nombre,
+        season: createSerieDto.temporada
       }
     });
 
@@ -35,13 +35,17 @@ export class SeriesService {
       imagenPath = `/uploads/${imagen.filename}`;
     }
 
-    const { equiposId, ...data } = createSerieDto;
     const serie = await this.prismaService.series.create({
       data: {
-        ...data,
-        imagen: imagenPath
+        name: createSerieDto.nombre,
+        season: createSerieDto.temporada,
+        description: createSerieDto.descripcion,
+        status: createSerieDto.estado,
+        country: createSerieDto.pais,
+        launchDate: createSerieDto.fechaLanzamiento ? new Date(createSerieDto.fechaLanzamiento) : undefined,
+        image: imagenPath
       },
-      include: { equipos: true }
+      include: { teams: true }
     });
 
     return this.addImageUrls([serie])[0];
@@ -49,7 +53,7 @@ export class SeriesService {
 
   async findAll() {
     const series = await this.prismaService.series.findMany({
-      include: { equipos: true }
+      include: { teams: true }
     });
     return this.addImageUrls(series);
   }
@@ -61,15 +65,15 @@ export class SeriesService {
   findLatest(limit: number = 3) {
     return this.prismaService.series.findMany({
       take: limit,
-      orderBy: { createAt: 'desc' },
-      include: { equipos: true }
+      orderBy: { createdAt: 'desc' },
+      include: { teams: true }
     });
   }
 
   async findOne(id: number) {
     const serieFound = await this.prismaService.series.findUnique({
       where: { id },
-      include: { equipos: true }
+      include: { teams: true }
     });
 
     if (!serieFound) {
@@ -86,14 +90,18 @@ export class SeriesService {
       imagenPath = `/uploads/${imagen.filename}`;
     }
 
-    const { equiposId, ...data } = updateSerieDto;
     const serieActualizada = await this.prismaService.series.update({
       where: { id },
       data: {
-        ...data,
-        ...(imagenPath && { imagen: imagenPath })
+        name: updateSerieDto.nombre,
+        season: updateSerieDto.temporada,
+        description: updateSerieDto.descripcion,
+        status: updateSerieDto.estado,
+        country: updateSerieDto.pais,
+        launchDate: updateSerieDto.fechaLanzamiento ? new Date(updateSerieDto.fechaLanzamiento) : undefined,
+        ...(imagenPath && { image: imagenPath })
       },
-      include: { equipos: true }
+      include: { teams: true }
     });
 
     if (!serieActualizada) {
