@@ -27,6 +27,9 @@ COPY . .
 # Install all dependencies (including dev) for build
 RUN pnpm install --frozen-lockfile
 
+# Rebuild native modules for Node 20
+RUN pnpm rebuild
+
 # Generate Prisma Client
 RUN npx prisma generate
 
