@@ -22,7 +22,8 @@
     "db:generate": "node set-schema.js && prisma generate",
     "db:migrate": "node set-schema.js && prisma migrate dev",
     "db:push": "node set-schema.js && prisma db push",
-    "db:studio": "node set-schema.js && prisma studio"
+    "db:studio": "node set-schema.js && prisma studio",
+    "db:seed": "node set-schema.js && ts-node src/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
