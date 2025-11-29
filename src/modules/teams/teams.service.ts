@@ -8,12 +8,6 @@ export class TeamsService {
 
   constructor(private prismaService: PrismaService){}
 
-  private addImageUrls(teams: any[]) {
-    return teams.map(team => ({
-      ...team,
-      imageUrl: team.imagen ? `${process.env.BASE_URL || 'http://localhost:4000'}${team.imagen}` : null
-    }));
-  }
 
   async create(createTeamDto: CreateTeamDto, imagen?: Express.Multer.File) {
     let imagenPath: string | undefined;
@@ -33,17 +27,16 @@ export class TeamsService {
       include: { series: true, players: true }
     });
 
-    return this.addImageUrls([team])[0];
+    return team;
   }
 
   async findAll() {
-    const teams = await this.prismaService.teams.findMany({
+    return await this.prismaService.teams.findMany({
       include: {
         players: true,
         series: true
       }
     });
-    return this.addImageUrls(teams);
   }
 
   async count() {
@@ -94,7 +87,7 @@ export class TeamsService {
       throw new NotFoundException(`Team with id ${id} not updated`);
     }
 
-    return this.addImageUrls([teamUpdated])[0];
+    return teamUpdated;
   }
 
   async remove(id: number) {

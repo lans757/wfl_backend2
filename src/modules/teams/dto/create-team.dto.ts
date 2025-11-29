@@ -6,6 +6,7 @@ import {
   IsUUID,
   IsNumber, // Importa IsNumber si usarás IDs numéricos
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 /**
  * DTO (Data Transfer Object) para la creación de nuevos equipos.
@@ -50,6 +51,7 @@ export class CreateTeamDto {
    */
   @IsNumber()
   @IsOptional()
+  @Transform(({ value }) => value ? parseInt(value) : undefined)
   seriesId?: number;
 
   /**

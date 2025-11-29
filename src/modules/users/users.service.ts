@@ -3,10 +3,11 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
   async getAllUsers() {
     const users = await this.prisma.user.findMany({
@@ -92,5 +93,41 @@ export class UsersService {
       where: { id: userId },
     });
     return { message: 'Usuario eliminado exitosamente.' };
+  }
+
+  async getProfile(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        imagen: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado.');
+    }
+
+    return user;
+  }
+
+  async updateProfileImage(userId: number, file: Express.Multer.File) {
+    const imagePath = `/uploads/${file.filename}`;
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { imagen: imagePath },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        imagen: true,
+      },
+    });
+    return user;
   }
 }

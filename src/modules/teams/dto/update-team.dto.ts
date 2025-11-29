@@ -3,6 +3,7 @@ import {
   IsOptional,
   IsNumber,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 /**
  * DTO (Data Transfer Object) para la actualización parcial de equipos.
@@ -47,6 +48,7 @@ export class UpdateTeamDto {
    */
   @IsNumber()
   @IsOptional()
+  @Transform(({ value }) => value ? parseInt(value) : undefined)
   seriesId?: number;
 
   /**

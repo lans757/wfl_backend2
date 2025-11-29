@@ -5,7 +5,7 @@ import { CreatePlayersDto } from './dto/create-players.dto';
 import type { UpdatePlayersDto } from './dto/update-players.dto';
 import { FileUploadService } from '../../common/file-upload.service';
 
-@Controller('jugadores')
+@Controller('players')
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 

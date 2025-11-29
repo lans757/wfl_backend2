@@ -8,12 +8,6 @@ export class SeriesService {
 
   constructor(private prismaService: PrismaService) {}
 
-  private addImageUrls(series: any[]) {
-    return series.map(serie => ({
-      ...serie,
-      imageUrl: serie.imagen ? `${process.env.BASE_URL || 'http://localhost:4000'}${serie.imagen}` : null
-    }));
-  }
 
   async create(createSerieDto: CreateSerieDto, imagen?: Express.Multer.File) {
     // Verificar si ya existe una serie con el mismo nombre y temporada
@@ -48,14 +42,13 @@ export class SeriesService {
       include: { teams: true }
     });
 
-    return this.addImageUrls([serie])[0];
+    return serie;
   }
 
   async findAll() {
-    const series = await this.prismaService.series.findMany({
+    return await this.prismaService.series.findMany({
       include: { teams: true }
     });
-    return this.addImageUrls(series);
   }
 
   async count() {
@@ -108,7 +101,7 @@ export class SeriesService {
       throw new NotFoundException(`Serie con el id ${id}, no ha sido actualizada`);
     }
 
-    return this.addImageUrls([serieActualizada])[0];
+    return serieActualizada;
   }
 
   async remove(id: number) {

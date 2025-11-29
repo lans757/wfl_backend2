@@ -49,7 +49,7 @@ export class PlayersService {
   }
 
   async findAll() {
-    const players = await this.prismaService.players.findMany({
+    return await this.prismaService.players.findMany({
       include: {
         team: {
           include: {
@@ -58,7 +58,6 @@ export class PlayersService {
         }
       }
     });
-    return this.addImageUrls(players);
   }
 
   async count() {
@@ -66,7 +65,7 @@ export class PlayersService {
   }
 
   async findAllWithDetails() {
-    const players = await this.prismaService.players.findMany({
+    return await this.prismaService.players.findMany({
       orderBy: { createdAt: 'desc' },
       include: {
         team: {
@@ -76,15 +75,8 @@ export class PlayersService {
         }
       }
     });
-    return this.addImageUrls(players);
   }
 
-  private addImageUrls(players: any[]) {
-    return players.map(player => ({
-      ...player,
-      imageUrl: player.imagen ? `${process.env.BASE_URL || 'http://localhost:4000'}${player.imagen}` : null
-    }));
-  }
 
   async findOne(id: number) {
     const playerFound = await this.prismaService.players.findUnique(
